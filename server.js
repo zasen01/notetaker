@@ -27,19 +27,19 @@ app.get("/notes",(req,res)=>{
 
 app.get("/api/notes",(req,res)=>{
    //get notes from db
-    getNotes().then(notes => res.json(notes))
+    getNotes().then(notes => res.json(notes)).catch(err => res.json(err))
 });
 
 app.post("/api/notes",(req,res) =>{
     getNotes().then(oldNotes => {
        var newArray = [...oldNotes,{title:req.body.title, text: req.body.text, id:uuidv4()}]
-       writeFile("db/db.json",JSON.stringify(newArray)).then(()=>res.json({msg:"ok"}))
+       writeFile("db/db.json",JSON.stringify(newArray)).then(()=>res.json({msg:"ok"})).catch(err => res.json(err))
     })
 });
 app.delete("/api/notes/:id", (req,res)=>{
     getNotes().then(unfilteredNotes =>{
         let filteredNotes = unfilteredNotes.filter(note => note.id !== req.params.id)
-        writeFile("db/db.json",JSON.stringify(filteredNotes)).then(()=>res.json({msg:"ok"}))
+        writeFile("db/db.json",JSON.stringify(filteredNotes)).then(()=>res.json({msg:"ok"})).catch(err => res.json(err))
         
     })
 });
